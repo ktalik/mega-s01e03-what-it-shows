@@ -1,0 +1,65 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: support desk
+status: open
+reviewed: 2026-11-02
+signature: Konrad Talik (ktalik)
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+
+  const links = {
+    parser: '__REPO__/issues/__N_PARSER__',
+    hint: '__REPO__/issues/__N_HINT__',
+    shift: '__REPO__/issues/__N_SHIFT__',
+  };
+</script>
+
+[#4471](/kb/incidents/4471) is marked known: one bug, one fix queued. Read report by report, it
+holds three problems. The queued parser fix closes only one of them.
+
+<Callout kind="warn">
+Not known. Three problems, three tickets. Count each report once, under what it describes.
+</Callout>
+
+## The three problems
+
+<ProblemTable ticket={4471} {links} />
+
+- **`parser`**: the shared parser reads every date month first. Every tenant on file writes the
+  day first, so a booking for 7 April comes out as 4 July. This is the bug #4471 names.
+- **`hint`**: tenants on `booking-v3` print `MM/DD/YYYY` under the date field. People type what
+  the hint says, and the form reads it day first. Only reports sent through that form. The parser
+  fix does not touch it: the form has to print the tenant's order.
+- **`shift`**: the date moves by one day, not a day/month swap. The same meeting lands on Tuesday
+  in Lisbon and Monday in Toronto; an invite arrives before its booking; June bookings are a day
+  off. This looks like a date-only value passed through a time zone. The desk had already read
+  these as a one-day move (`desk-notes.json`), and `CauseTable` footnotes them under `parser`
+  instead of counting them apart.
+
+## Why the merge hid them
+
+- [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on subject line. All three
+  problems arrive with the same subjects ("Date is wrong", "Month and day swapped?"), so the rule
+  put them in one ticket. Its own consequences say engineering would split them later. Nobody did.
+- Intake's `hint` tag comes from the reporter's browser, not the tenant's form. It is wrong in
+  both directions, so it cannot be used to count.
+- The ticket export repeats reports across overlapping pages. Every count here is by unique id.
+
+## The desk's own table, for comparison
+
+<CauseTable ticket={4471} />
+
+## What to do
+
+1. Keep #4471 for `parser` only, and stop calling it known until the fix ships.
+2. Route `hint` to the booking-v3 form owners.
+3. Route `shift` to whoever turns booking dates into invites.
+4. Replace decision 0001 with a record that merges on what a report describes, not its subject.
+
+<RenderStamp {signature} />
