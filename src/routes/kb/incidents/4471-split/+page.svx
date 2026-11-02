@@ -21,11 +21,11 @@ signature: Konrad Talik (ktalik)
 </script>
 
 [#4471](/kb/incidents/4471) is one ticket. Read report by report, it holds more than one problem,
-and the queued parser fix closes only one of them. Every number on this page is computed from the
+and engineering closed it on 5 October with one fix. Every number on this page is computed from the
 export.
 
 <Callout kind="warn">
-One ticket per problem. Each one is filed on its own.
+One ticket per problem. The parser bug is fixed, the hint went with its form, the one-day shift has no fix.
 </Callout>
 
 ## The problems
@@ -43,7 +43,7 @@ month swap.
 
 The `booking-v3` form prints `MM/DD/YYYY` under its date field. People type what the hint says,
 and the form reads it in the tenant's order, day first. Only reports sent through that form. The
-parser fix does not touch it: the form has to print the tenant's order.
+parser fix does not touch it; engineering retired the form instead.
 
 <ReportQuote id="R-41241" />
 
@@ -64,9 +64,7 @@ them later.
 
 ## What to do
 
-1. Keep #4471 for `parser`.
-2. Route `hint` to the booking-v3 form owners.
-3. Route `shift` to whoever turns booking dates into invites.
-4. Replace decision 0001 with a record that merges on what a report describes, not its subject.
+1. Route `shift` to whoever turns booking dates into invites: nothing in the engineering update covers it.
+2. Replace decision 0001 with a record that merges on what a report describes, not its subject.
 
 <RenderStamp {signature} />

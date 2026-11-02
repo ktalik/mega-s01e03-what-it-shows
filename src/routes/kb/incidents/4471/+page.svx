@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · booking dates land on the wrong day'
 owner: support desk
-status: known
+status: closed
 reviewed: 2026-09-30
 ---
 
@@ -17,10 +17,11 @@ People tell us their bookings land on the wrong day.
 
 <TicketSummary ticket={4471} />
 
-A fix for the parser is queued. What each cause is: [#4471, three problems](/kb/incidents/4471-split).
+Closed by engineering on 5 October. What each cause is, and what engineering did about it:
+[#4471, three problems](/kb/incidents/4471-split).
 
 <Callout>
-Parser fix queued. It does not cover every cause below.
+Closed. Not every cause below was fixed.
 </Callout>
 
 ## What was merged

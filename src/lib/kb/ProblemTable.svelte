@@ -1,6 +1,7 @@
 <script lang="ts">
   import reports from '#lib/data/reports-4471.json';
   import notes from '#lib/data/desk-notes.json';
+  import engineering from '#lib/data/engineering-4471.json';
   import { causeOf, dayFirst, type Report } from '#lib/kb/causes';
   import { tenantHandles, tenantOf } from '#lib/kb/locales';
   import { mergedInto, sharedSubjects, splitTicket, type Problem } from '#lib/kb/problems';
@@ -14,6 +15,12 @@
   const problemOf = (r: Report): Problem =>
     notes.oneDayMove.includes(r.id) ? 'shift' : (causeOf(r, tenantOf(r)) ?? 'unplaced');
   const shared = $derived(sharedSubjects(mergedInto(reports as Report[], ticket), problemOf));
+  // What engineering did per cause; a cause it does not list is still open.
+  const outcome = (p: Problem) =>
+    (engineering.ticket === ticket ? (engineering.causes as Record<string, { state: string; note: string }>)[p] : undefined) ?? {
+      state: 'open',
+      note: 'not in the engineering update',
+    };
   const ticketNo = (url: string) => '#' + url.split('/').pop();
 </script>
 
@@ -26,7 +33,7 @@
 
 <table>
   <thead>
-    <tr><th>problem</th><th>reports</th><th>tenants</th><th>seen</th><th>ticket</th></tr>
+    <tr><th>problem</th><th>reports</th><th>tenants</th><th>seen</th><th>engineering</th><th>ticket</th></tr>
   </thead>
   <tbody>
     {#each split.groups as g (g.problem)}
@@ -35,6 +42,7 @@
         <td>{g.ids.length}</td>
         <td>{g.tenants}</td>
         <td>{g.firstSeen} → {g.lastSeen}</td>
+        <td>{outcome(g.problem).state}<br /><small>{outcome(g.problem).note}</small></td>
         <td>
           {#if links[g.problem]}<a href={links[g.problem]}>{ticketNo(links[g.problem] ?? '')}</a>{:else}none yet{/if}
         </td>
