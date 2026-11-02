@@ -1,8 +1,8 @@
 // How the support desk tells which cause a report belongs to. Pages explain it; this file is what runs.
 
 // `meta.intakeTag` is what intake guessed from the reporter's browser, the moment the report came
-// in. It is a guess. The cause depends on the tenant: where they are, and which booking form they
-// run (locales.ts). The two disagree more often than intake would like.
+// in. It is a guess, so nothing here reads it. The cause depends on the tenant: where they are,
+// and which booking form they run (locales.ts).
 export type Report = {
   id: string;
   receivedAt: string;
@@ -55,8 +55,6 @@ export function uniqueById(reports: Report[]): Report[] {
 export type CauseGroup = {
   cause: Cause | 'unplaced';
   reports: Report[];
-  // What intake tagged these reports as: tag → count.
-  taggedAs: Record<string, number>;
   tenants: number;
   firstSeen: string;
   lastSeen: string;
@@ -75,7 +73,6 @@ export function groupByCause(reports: Report[], tenantOf: (r: Report) => Tenant 
       return {
         cause,
         reports: rs,
-        taggedAs: rs.reduce<Record<string, number>>((n, r) => ({ ...n, [r.meta.intakeTag]: (n[r.meta.intakeTag] ?? 0) + 1 }), {}),
         tenants: new Set(rs.map((r) => r.tenant)).size,
         firstSeen: days[0],
         lastSeen: days[days.length - 1],

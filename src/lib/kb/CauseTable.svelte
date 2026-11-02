@@ -9,11 +9,6 @@
   const merged = $derived(uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket));
   const groups = $derived(groupByCause(merged, tenantOf));
   const owner = $derived(ticketCause(groups, ticket));
-  const tags = (g: { taggedAs: Record<string, number> }) =>
-    Object.entries(g.taggedAs)
-      .sort((a, b) => b[1] - a[1])
-      .map(([tag, n]) => `${tag} ×${n}`)
-      .join(' · ');
 </script>
 
 <p class="sum">
@@ -24,14 +19,13 @@
 
 <table>
   <thead>
-    <tr><th>cause</th><th>reports</th><th>tagged as</th><th>tenants</th><th>seen</th><th></th></tr>
+    <tr><th>cause</th><th>reports</th><th>tenants</th><th>seen</th><th></th></tr>
   </thead>
   <tbody>
     {#each groups as g (g.cause)}
       <tr class:wrong={g.cause !== owner}>
         <td><code>{g.cause}</code></td>
         <td>{g.reports.length}</td>
-        <td class="tags">{tags(g)}</td>
         <td>{g.tenants}</td>
         <td>{g.firstSeen} → {g.lastSeen}</td>
         <td>{g.cause === owner ? `#${ticket}` : 'not this ticket — no ticket of its own'}</td>
@@ -49,7 +43,6 @@
 
 <style>
   .sum { font-size: 1.1rem; }
-  .tags { color: var(--muted); font-size: 0.85em; }
   .note { color: var(--muted); font-size: 0.85em; }
   .wrong td { background: var(--warn-bg); }
   .wrong td:last-child { color: var(--warn); font-weight: 600; }

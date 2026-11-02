@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471 · dates parse mm/dd in eu locales'
+title: '#4471 · booking dates land on the wrong day'
 owner: support desk
 status: known
 reviewed: 2026-09-30
@@ -8,29 +8,30 @@ reviewed: 2026-09-30
 
 <script>
   import CauseTable from '#lib/kb/CauseTable.svelte';
+  import TicketSummary from '#lib/kb/TicketSummary.svelte';
   import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
   import Callout from '#lib/kb/Callout.svelte';
 </script>
 
-Since April, people have told us their bookings land on the wrong day: a month flipped. By
-4 October the desk had **412 reports**.
+People tell us their bookings land on the wrong day.
 
-**Merged as one issue.** The parser reads dates month first, and our tenants write the day
-first. The fix is queued.
+<TicketSummary ticket={4471} />
+
+A fix for the parser is queued. What each cause is: [#4471, three problems](/kb/incidents/4471-split).
 
 <Callout>
-Known. One issue, one fix queued.
+Parser fix queued. It does not cover every cause below.
 </Callout>
 
 ## What was merged
 
 <CauseTable ticket={4471} />
 
-## Since April
+## Received and merged
 
 <QueueTimeline ticket={4471} />
 
 ## Lessons
 
-- A big ticket is mostly one bug reported many times. Merge early, count once.
+- Count a big ticket by what its reports describe, not by its subject line.
 - Write the page while the queue is still in your head.

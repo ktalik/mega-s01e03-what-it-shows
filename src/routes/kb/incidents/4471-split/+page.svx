@@ -9,7 +9,7 @@ signature: Konrad Talik (ktalik)
 
 <script>
   import ProblemTable from '#lib/kb/ProblemTable.svelte';
-  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import ReportQuote from '#lib/kb/ReportQuote.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
   import Callout from '#lib/kb/Callout.svelte';
 
@@ -20,44 +20,51 @@ signature: Konrad Talik (ktalik)
   };
 </script>
 
-[#4471](/kb/incidents/4471) is marked known: one bug, one fix queued. Read report by report, it
-holds three problems. The queued parser fix closes only one of them.
+[#4471](/kb/incidents/4471) is one ticket. Read report by report, it holds more than one problem,
+and the queued parser fix closes only one of them. Every number on this page is computed from the
+export.
 
 <Callout kind="warn">
-Not known. Three problems, three tickets. Count each report once, under what it describes.
+One ticket per problem. Each one is filed on its own.
 </Callout>
 
-## The three problems
+## The problems
 
 <ProblemTable ticket={4471} {links} />
 
-- **`parser`**: the shared parser reads every date month first. Every tenant on file writes the
-  day first, so a booking for 7 April comes out as 4 July. This is the bug #4471 names.
-- **`hint`**: tenants on `booking-v3` print `MM/DD/YYYY` under the date field. People type what
-  the hint says, and the form reads it day first. Only reports sent through that form. The parser
-  fix does not touch it: the form has to print the tenant's order.
-- **`shift`**: the date moves by one day, not a day/month swap. The same meeting lands on Tuesday
-  in Lisbon and Monday in Toronto; an invite arrives before its booking; June bookings are a day
-  off. This looks like a date-only value passed through a time zone. The desk had already read
-  these as a one-day move (`desk-notes.json`), and `CauseTable` footnotes them under `parser`
-  instead of counting them apart.
+### `parser`
+
+The shared parser reads every date month first, and the tenants write the day first, so day and
+month swap.
+
+<ReportQuote id="R-41200" />
+
+### `hint`
+
+The `booking-v3` form prints `MM/DD/YYYY` under its date field. People type what the hint says,
+and the form reads it in the tenant's order, day first. Only reports sent through that form. The
+parser fix does not touch it: the form has to print the tenant's order.
+
+<ReportQuote id="R-41241" />
+
+### `shift`
+
+The date moves by one day, not a day/month swap. The desk read these reports as a one-day move
+(`desk-notes.json`). It looks like a date-only value passed through a time zone. The parser fix
+does not touch it.
+
+<ReportQuote id="R-41344" />
+<ReportQuote id="R-41236" />
 
 ## Why the merge hid them
 
-- [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on subject line. All three
-  problems arrive with the same subjects ("Date is wrong", "Month and day swapped?"), so the rule
-  put them in one ticket. Its own consequences say engineering would split them later. Nobody did.
-- Intake's `hint` tag comes from the reporter's browser, not the tenant's form. It is wrong in
-  both directions, so it cannot be used to count.
-- The ticket export repeats reports across overlapping pages. Every count here is by unique id.
-
-## The desk's own table, for comparison
-
-<CauseTable ticket={4471} />
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on subject line, and the problems
+arrive with the same subjects (listed under the table). Its consequences say engineering would split
+them later.
 
 ## What to do
 
-1. Keep #4471 for `parser` only, and stop calling it known until the fix ships.
+1. Keep #4471 for `parser`.
 2. Route `hint` to the booking-v3 form owners.
 3. Route `shift` to whoever turns booking dates into invites.
 4. Replace decision 0001 with a record that merges on what a report describes, not its subject.
