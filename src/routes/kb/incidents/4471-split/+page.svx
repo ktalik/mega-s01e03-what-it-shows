@@ -14,9 +14,9 @@ signature: Konrad Talik (ktalik)
   import Callout from '#lib/kb/Callout.svelte';
 
   const links = {
-    parser: '__REPO__/issues/__N_PARSER__',
-    hint: '__REPO__/issues/__N_HINT__',
-    shift: '__REPO__/issues/__N_SHIFT__',
+    parser: 'https://github.com/ktalik/mega-s01e03-what-it-shows/issues/1',
+    hint: 'https://github.com/ktalik/mega-s01e03-what-it-shows/issues/2',
+    shift: 'https://github.com/ktalik/mega-s01e03-what-it-shows/issues/3',
   };
 </script>
 
