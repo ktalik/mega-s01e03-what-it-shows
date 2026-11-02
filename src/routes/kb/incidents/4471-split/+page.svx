@@ -4,7 +4,7 @@ title: '#4471 · three problems, not one'
 owner: support desk
 status: open
 reviewed: 2026-11-02
-signature: Konrad Talik (ktalik)
+signature: v1.eyJzdWIiOiIzNjkiLCJhdWQiOiJjaGFsbGVuZ2U6d2hhdC1pdC1zaG93cyIsImlhdCI6MTc5MzYzNjkzOSwiZXhwIjoxNzkzNzIzMzM5fQ.RNBy_Wa2q6sNtqzEr63FqLXHU_y8VD9dD44tUu1vqPs
 ---
 
 <script>
